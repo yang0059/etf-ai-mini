@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="使用 Python、uv 和 Ollama 製作的 ETF 入門小助手。">
+  <title>ETF 入門小助手 | Python × Ollama</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #1b2c3c; background: #f5f8fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; line-height: 1.75; }
+    .wrap { max-width: 850px; margin: auto; padding: 48px 22px 80px; }
+    .hero { padding: 42px; border-radius: 22px; background: #173b56; color: white; }
+    .tag { display: inline-block; border: 1px solid #8eaebe; padding: 4px 12px; border-radius: 30px; font-size: 13px; margin-bottom: 12px; }
+    h1 { font-size: clamp(29px, 5vw, 42px); line-height: 1.2; margin: 7px 0 12px; }
+    h2 { font-size: 23px; margin: 0 0 12px; }
+    p { margin: 8px 0; }
+    .hero p { color: #deebf3; }
+    .card { background: white; border: 1px solid #e5ebf0; padding: 28px 30px; border-radius: 18px; margin-top: 20px; box-shadow: 0 7px 25px rgba(16, 42, 70, .035); }
+    code { background: #edf2f6; border-radius: 5px; padding: 2px 5px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; border-radius: 10px; padding: 18px; color: #eaf7ff; background: #102938; line-height: 1.75; }
+    pre code { background: transparent; padding: 0; }
+    .result { min-height: 90px; white-space: pre-wrap; border-left: 4px solid #24837f; padding: 15px 18px; background: #f1faf8; border-radius: 0 10px 10px 0; }
+    .muted { color: #5e6b78; font-size: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .chips span { color: #cde6ee; border: 1px solid #507187; border-radius: 30px; padding: 2px 12px; font-size: 13px; }
+    footer { color: #647283; font-size: 13px; text-align: center; margin-top: 24px; }
+    @media (max-width: 600px) { .hero { padding: 26px; } .card { padding: 22px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <span class="tag">MINI LLM PROJECT</span>
+      <h1>ETF 入門小助手</h1>
+      <p>一個 Python 小程式，呼叫本機 AI 模型，讓初學者用三點快速認識 ETF。</p>
+      <div class="chips"><span>Python + uv</span><span>Ollama</span><span>串流輸出 Streaming</span><span>GitHub Pages</span></div>
+    </header>
+
+    <section class="card">
+      <h2>01 / 做了什麼？</h2>
+      <p>程式向本地 Ollama 的 <code>/api/generate</code> 送出 ETF 入門問題，設定 <code>stream: true</code>，收到片段就即時印到終端機，最後儲存至 <code>docs/result.txt</code>。</p>
+      <p class="muted">主題：ETF 基本概念、優點與投資風險。此作品是學習示範，不提供個別投資建議。</p>
+    </section>
+
+    <section class="card">
+      <h2>02 / 怎麼執行？</h2>
+      <p>先安裝 <a href="https://docs.astral.sh/uv/">uv</a> 與 <a href="https://ollama.com/download">Ollama</a>，確保 Ollama 正在執行，然後於專案資料夾輸入：</p>
+      <pre><code>ollama pull qwen2.5:0.5b
+uv run main.py</code></pre>
+      <p class="muted">無需 API Key，模型約 398 MB。若尚未安裝 uv，請見 README。</p>
+    </section>
+
+    <section class="card">
+      <h2>03 / 執行結果</h2>
+      <p class="muted">下方內容讀取 <code>docs/result.txt</code>；初次上傳時顯示尚未執行提示。執行程式並推送最新結果後，網站會更新。</p>
+      <div class="result" id="result" aria-live="polite">讀取結果中⋯</div>
+      <p class="muted">輸出示意（非本次模型實測）：ETF 是一籃子資產的基金；優點是分散投資；風險是仍可能虧損。</p>
+    </section>
+
+    <section class="card">
+      <h2>04 / AI 使用說明</h2>
+      <p>本作品使用 AI 協助規劃與撰寫範例程式、說明文件和作品頁。實際內容生成由本機 Ollama 的 <code>qwen2.5:0.5b</code> 執行，透過串流回傳。模型可能出錯，ETF 說明應自行查證。</p>
+      <p>網頁只展示已提交的文字檔，不會直接連線到使用者電腦上的 Ollama，也不會在 GitHub Actions 裡執行模型。</p>
+    </section>
+    <footer>Built with Python · uv · Ollama · GitHub Actions / Pages</footer>
+  </main>
+  <script>
+    fetch('result.txt')
+      .then(response => { if (!response.ok) throw new Error('找不到結果檔案'); return response.text(); })
+      .then(text => { document.getElementById('result').textContent = text.trim() || '目前沒有結果'; })
+      .catch(() => { document.getElementById('result').textContent = '讀取失敗；請透過 GitHub Pages 網址開啟本站。'; });
+  </script>
+</body>
+</html>

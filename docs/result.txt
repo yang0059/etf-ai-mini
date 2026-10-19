@@ -1,0 +1,1 @@
+尚未執行模型：請在本機安裝 Ollama 和 uv，執行 uv run main.py，並將更新後的 docs/result.txt 推送到 GitHub。

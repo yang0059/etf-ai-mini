@@ -1,0 +1,6 @@
+[project]
+name = "etf-ai-mini"
+version = "0.1.0"
+description = "用 Ollama 串流生成 ETF 新手入門說明"
+requires-python = ">=3.11"
+dependencies = []
